@@ -1,0 +1,270 @@
+
+<!--
+ Copyright 2016 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
+  <link rel="stylesheet" type="text/css" href="/css/Semantic-UI-Alert.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <title>gasStasion</title>
+  <link rel="stylesheet" type="text/css" href="css/semantic.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic.min.input.css">
+  <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#2F3BA2">
+
+</head>
+
+<body cz-shortcut-listen="true">
+   <div class="ui ui container">
+    <br>
+      <h1 class="ui center aligned header">Gas station Event Check</h1>
+    <br>
+
+    <div class="ui two column grid">
+      <div class="column">
+        <div class="ui raised segment">
+          <a class="ui violet ribbon label">Current Account1</a>
+          <div id="current_account">web3 Connected</div>
+          <a class="ui red ribbon label">FuelingEvent</a>
+          <div id="FuelingEvent"></div>
+          <div id="FuelingEventMS"></div>
+          <p></p>
+          <a class="ui yellow ribbon label">CleaningEvent</a>
+          <div id="CleaningEvent"></div>
+          <div id="CleaningEventMS"></div>
+          <p></p>
+          <a class="ui green ribbon label">gasTankCheckedEvent</a>
+          <div id="gasTankCheckedEvent"></div>
+          <div id="gasTankCheckedEventMS"></div>
+          <p></p>
+          <a class="ui blue ribbon label">abnormalTankCheckedEvent</a>
+          <div id="abnormalTankCheckedEvent"></div>
+          <div id="abnormalTankCheckedEventMS"></div>
+          <p></p>
+        </div>
+      </div>
+    </div><br>
+
+    
+
+    <div class="ui two column grid">
+            <div class="column">
+              <div class="ui raised segment">
+                <a class="ui violet ribbon label">Current Account2</a>
+                <div id="current_account">web3 Connected</div>
+                <a class="ui red ribbon label">FuelingEvent</a>
+                <div id="FuelingEvent2"></div>
+                <div id="FuelingEvent2MS"></div>
+                <p></p>
+                <a class="ui yellow ribbon label">CleaningEvent</a>
+                <div id="CleaningEvent2"></div>
+                <div id="CleaningEvent2MS"></div>
+                <p></p>
+                <a class="ui green ribbon label">gasTankCheckedEvent</a>
+                <div id="gasTankCheckedEvent2"></div>
+                <div id="gasTankCheckedEvent2MS"></div>
+                <p></p>
+                <a class="ui blue ribbon label">abnormalTankCheckedEvent</a>
+                <div id="abnormalTankCheckedEvent2"></div>
+                <div id="abnormalTankCheckedEvent2MS"></div>
+                <p></p>
+              </div>
+            </div>
+          </div>
+
+
+
+  </div>
+
+  </body>
+
+   <script src="/js/jquery.min.js"></script>
+   <script src="/js/semantic.js"></script>
+  <script type="text/javascript" src="/js/Semantic-UI-Alert.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bignumber.js/bignumber.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script type="text/javascript">
+
+  const contractAddress1 = "0x9504F3e549B6add253c717889Cc741D488150106";
+  const contractAddress2 ="0xfbc4b94c55cfc7e605a3d3576ba31e2f3641acb5";
+  const contractABI = [ { "constant": false, "inputs": [ { "name": "_sensoredTankAmount", "type": "uint256" } ], "name": "stopCleaning", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x40f41099" }, { "constant": false, "inputs": [ { "name": "_filledOutAmount", "type": "uint256" }, { "name": "_sensoredTankAmount", "type": "uint256" } ], "name": "checkGasTankAmount", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x4ca0fe7a" }, { "constant": false, "inputs": [], "name": "stopFueling", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x4cb40d6d" }, { "constant": false, "inputs": [], "name": "startCleaning", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x7c080cd8" }, { "constant": false, "inputs": [ { "name": "_emptyingAmount", "type": "uint256" } ], "name": "devEmptyFuel", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x8e3b9997" }, { "constant": true, "inputs": [], "name": "gasTankType", "outputs": [ { "name": "", "type": "string", "value": "DIESEL" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0x901e6469" }, { "constant": true, "inputs": [], "name": "Fueling", "outputs": [ { "name": "", "type": "bool", "value": false } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0x9ae770e5" }, { "constant": false, "inputs": [ { "name": "_fillingFuelAmount", "type": "uint256" } ], "name": "startFueling", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x9b55f8b2" }, { "constant": true, "inputs": [], "name": "EmptyingAmount", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0x9cc00c4a" }, { "constant": false, "inputs": [ { "name": "_range", "type": "uint256" } ], "name": "setErrorRange", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function", "signature": "0x9f41e2ca" }, { "constant": true, "inputs": [], "name": "newFuelAmount", "outputs": [ { "name": "", "type": "uint256", "value": "0" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0xa71b48a0" }, { "constant": true, "inputs": [], "name": "beforeFuelAmount", "outputs": [ { "name": "", "type": "uint256", "value": "330" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0xc7d25eca" }, { "constant": true, "inputs": [], "name": "gasStation", "outputs": [ { "name": "", "type": "string", "value": "SK_ENERGY" } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0xdbb602fd" }, { "constant": true, "inputs": [], "name": "Emptying", "outputs": [ { "name": "", "type": "bool", "value": false } ], "payable": false, "stateMutability": "view", "type": "function", "signature": "0xfdd58722" }, { "inputs": [ { "name": "_gasStationName", "type": "string", "index": 0, "typeShort": "string", "bits": "", "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;gas Station Name", "template": "elements_input_string", "value": "SK_ENERGY" }, { "name": "_gasTankType", "type": "string", "index": 1, "typeShort": "string", "bits": "", "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;gas Tank Type", "template": "elements_input_string", "value": "DIESEL" } ], "payable": false, "stateMutability": "nonpayable", "type": "constructor", "signature": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_gasStationName", "type": "string" }, { "indexed": false, "name": "_gasTankType", "type": "string" }, { "indexed": false, "name": "_fillingFuelAmount", "type": "uint256" }, { "indexed": false, "name": "_statusMessage", "type": "string" } ], "name": "FuelingEvent", "type": "event", "signature": "0x74a9a6c567708bb12aa9f37f2ae0416136528ad2ea8b3eac59d958f3adfc0739" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_gasStationName", "type": "string" }, { "indexed": false, "name": "_gasTankType", "type": "string" }, { "indexed": false, "name": "_emptyingFuelAmount", "type": "uint256" }, { "indexed": false, "name": "_statusMessage", "type": "string" } ], "name": "CleaningEvent", "type": "event", "signature": "0x485671fd278ed54e7f89122a9195f6ef540ca60dac48c384142f5c2da49ca1f6" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_gasStationName", "type": "string" }, { "indexed": false, "name": "_gasTankType", "type": "string" }, { "indexed": false, "name": "_statusMessage", "type": "string" } ], "name": "gasTankCheckedEvent", "type": "event", "signature": "0x516e5cafa09bac8a93d49056ffc757a345c94fc72514f7419a268962ce8cf758" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "_gasStationName", "type": "string" }, { "indexed": false, "name": "_gasTankType", "type": "string" }, { "indexed": false, "name": "_statusMessage", "type": "string" }, { "indexed": false, "name": "_abnormalAmount", "type": "uint256" } ], "name": "abnormalTankCheckedEvent", "type": "event", "signature": "0x597a6675a159b1b27625328c2ed88b0ace0ba484f5f0fe3cc3c407ae23f8e21f" } ];
+
+    console.log('eventTest');
+
+            $(document).ready(function(){
+             web3js = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+            console.log("Connect to Localhost");
+
+            web3js.eth.getBlockNumber(function(error, result) {
+                if (error != null) {
+                    document.getElementById("current_account").textContent = "Connection ERROR : Unable to read block info";
+                    baseBlock = -1;
+                    accounts = null;
+                }
+                else {
+                    baseBlock = result;
+                    web3js.eth.getAccounts(function(error, result) {
+                        console.log(result);
+                        if (error != null) {
+                            document.getElementById("current_account").textContent = "Connectino ERROR : Unable to read account info";
+                            accounts = null;
+                        } else {
+
+                            accounts = result;
+                            GasCheck1 = web3js.eth.contract(contractABI).at(contractAddress1);
+                            GasCheck2 = web3js.eth.contract(contractABI).at(contractAddress2);
+
+                            console.log(accounts);
+
+                            watchStart();
+                        }
+                    });
+                }
+            });
+        });
+
+   function watchStart() {
+        web3js.eth.defaultAccount=web3js.eth.coinbase;
+
+        var getFuelingEvent1 = GasCheck1.FuelingEvent(null, {fromBlock:0});
+        var getFuelingEvent2 = GasCheck2.FuelingEvent(null, {fromBlock:0});
+
+        console.log(GasCheck1);
+        console.log(GasCheck2);
+        //Filling Event
+        getFuelingEvent1.watch(function(error, result) {
+            if (!error) {
+                console.log("Gas Station Name: "+result.args._gasStationName);
+                console.log("Gas Tank Type: "+result.args._gasTankType);
+                console.log("Filling Fuel Amount: "+result.args._fillingFuelAmount);
+                console.log("Status Message: "+result.args._statusMessage);
+
+                $("#FuelingEvent").text('From '+result.args._gasStationName+' gas station '+result.args._gasTankType+' has been fueled '+result.args._fillingFuelAmount+'L');
+                $("#FuelingEventMS").text('Status: ' +result.args._statusMessage);
+            } else
+                console.log(error);
+            });
+      
+        getFuelingEvent2.watch(function(error, result) {
+            if (!error) {
+                console.log("Gas Station Name: "+result.args._gasStationName);
+                console.log("Gas Tank Type: "+result.args._gasTankType);
+                console.log("Filling Fuel Amount: "+result.args._fillingFuelAmount);
+                console.log("Status Message: "+result.args._statusMessage);
+
+                $("#FuelingEvent2").text('From '+result.args._gasStationName+' gas station '+result.args._gasTankType+' has been fueled '+result.args._fillingFuelAmount+'L');
+                $("#FuelingEvent2MS").text('Status: ' +result.args._statusMessage);
+            } else
+                console.log(error);
+            });    
+        
+        //Cleaning Event
+        var getCleaningEvent1 = GasCheck1.CleaningEvent(null, {fromBlock:0});
+        var getCleaningEvent2 = GasCheck2.CleaningEvent(null, {fromBlock:0});
+       
+        getCleaningEvent1.watch(function(error, result) {
+            if (!error) {
+                console.log("Gas Station Name: "+result.args._gasStationName);
+                console.log("Gas Tank Type: "+result.args._gasTankType);
+                console.log("Emptying Fuel Amount: "+result.args._emptyingFuelAmount);
+                console.log("Status Message: "+result.args._statusMessage);
+
+                $("#CleaningEvent").text('From ' + result.args._gasStationName+' gas station '+ result.args._gasTankType+' tank is being cleaned and had '+result.args._emptyingFuelAmount+'L of gas.');
+                $("#CleaningEventMS").text('Status: ' + result.args._statusMessage);
+            } else
+                console.log(error);
+            });
+
+        getCleaningEvent2.watch(function(error, result) {
+            if (!error) {
+                console.log("Gas Station Name: "+result.args._gasStationName);
+                console.log("Gas Tank Type: "+result.args._gasTankType);
+                console.log("Emptying Fuel Amount: "+result.args._emptyingFuelAmount);
+                console.log("Status Message: "+result.args._statusMessage);
+
+                $("#CleaningEvent2").text('From ' + result.args._gasStationName+' gas station '+ result.args._gasTankType+' tank is being cleaned and had '+result.args._emptyingFuelAmount+'L of gas.');
+                $("#CleaningEvent2MS").text('Status: ' + result.args._statusMessage);
+            } else
+                console.log(error);
+            });
+        
+        console.log("Am i fucking working or what");
+        //Gas Tank Checking Event
+        var getGasTankCheckedEvent1 = GasCheck1.gasTankCheckedEvent(null, {fromBlock:0});
+        var getGasTankCheckedEvent2 = GasCheck2.gasTankCheckedEvent(null, {fromBlock:0});
+
+        getGasTankCheckedEvent1.watch(function(error, result) {
+            if (!error) {
+                console.log("Gas Station Name: "+result.args._gasStationName);
+                console.log("Gas Tank Type: "+result.args._gasTankType);
+                console.log("Status Message: "+result.args._statusMessage);
+
+                $("#gasTankCheckedEvent").text('From '+ result.args._gasStationName + ' gas station '+result.args._gasTankType+' tank has been checked');
+                $("#gasTankCheckedEventMS").text('Status: '+ result.args._statusMessage);
+            } else
+                console.log(error);
+            });
+
+        getGasTankCheckedEvent2.watch(function(error, result) {
+            if (!error) {
+                console.log("Gas Station Name:  "+result.args._gasStationName);
+                console.log("Gas Tank Type: "+result.args._gasTankType);
+                console.log("Status Message: "+result.args._statusMessage);
+
+                $("#gasTankCheckedEvent2").text('From '+ result.args._gasStationName + ' gas station '+result.args._gasTankType+' tank has been checked');
+                $("#gasTankCheckedEvent2MS").text('Status: '+ result.args._statusMessage);
+            } else
+                console.log(error);
+            });
+
+        //Get Abnormal Tank Check Event
+        var getAbnormalTankCheckedEvent1 = GasCheck1.abnormalTankCheckedEvent(null, {fromBlock:0});
+        var getAbnormalTankCheckedEvent2 = GasCheck2.abnormalTankCheckedEvent(null, {fromBlock:0});
+
+        getAbnormalTankCheckedEvent1.watch(function(error, result) {
+            if (!error) {
+                console.log("Gas Station Name:  "+result.args._gasStationName);
+                console.log("Gas Tank Type: "+result.args._gasTankType);
+                console.log("Abnormal Fuel Amount: "+result.args._abnormalAmount);
+                console.log("Status Message: "+result.args._statusMessage);
+                $("#abnormalTankCheckedEvent").text('From ' + result.args._gasStationName+' gas station '+result.args._gasTankType+' tank has'+result.args._abnormalAmount +'L of abnormal amount of fuel');
+                $("#abnormalTankCheckedEventMS").text('Status: ' + result.args._statusMessage);
+            } else
+                console.log(error);
+            });
+
+        getAbnormalTankCheckedEvent2.watch(function(error, result) {
+            if (!error) {
+                console.log("Gas Station Name:  "+result.args._gasStationName);
+                console.log("Gas Tank Type: "+result.args._gasTankType);
+                console.log("Abnormal Fuel Amount: "+result.args._abnormalAmount);
+                console.log("Status Message: "+result.args._statusMessage);
+                $("#abnormalTankCheckedEvent2").text('From ' + result.args._gasStationName+' gas station '+result.args._gasTankType+' tank has'+result.args._abnormalAmount +'L of abnormal amount of fuel');
+                $("#abnormalTankCheckedEvent2MS").text('Status: ' + result.args._statusMessage);
+            } else
+                console.log(error);
+            });
+    }
+
+  </script>
+</body>
+</html>

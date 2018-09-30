@@ -1,2 +1,25 @@
-# ethereum-gas-station-project
-make gas station more trustful using ethereum with iot
+# GasStation Project
+
+### 사용방법
+
+프로젝트 내의 디렉토리는 라즈베리파이, 아두이노 내에 모두 위치시킨다. 
+
+#### Desktop 및 라즈베리파이 환경 설정
+
+1. 2개의 geth를 활용하여 프라이빗 블록체인을 구축한다. 
+2. 라즈베리파이의 geth를 해당 프라이빗 블록체인에 참여시켜 총 3개의 노드로 구성된 블록체인을 구축한다.
+3. `contract` 디렉토리 내에 있는 `GasCheck.sol` 를 컨트랙트로 배포한다.
+4. 라즈베리 파이 내에 `public` 디렉토리 및 `app.js`, `package.json` 을 위치시키고 `npm install` 을 진행하여 모듈들을 다운로드 받는다. 
+5. 라즈베리파이 내의 `app.js` 소스코드의 내용 중 컨트랙트 정보 (`contract address`, `contract abi`)를 배포한 컨트랙트의 내용에 맞게 업데이트 시켜준다. 
+6. 라즈베리파이 내의 `public` 디렉토리 내의 `GasStationEvent.html` 의 내용 또한 배포한 컨트랙트에 맞게 업데이트 시켜준다.
+
+#### 아두이노와 라즈베리파이 환경 설정
+
+1. 아두이노와 라즈베리 파이는 유선으로 연결한다.
+2. 아두이노에 수위 센서 회로 구성을 마치고 `IoT` 디렉토리 내의 코드를 동작시킨다.
+3. 라즈베리 파이에서는 이에 맞춰 `app.js` 파일을 `node app.js` 명령으로 실행시킨다.
+4. 실행하면 포트 넘버가 결과로 출력되는데, 이때 `public` 폴더 내의 `index.html` 을 확인하기 위해 `localhost:<port_number>` 를 입력하여 웹 브라우저로 띄운다.
+5. 마지막으로 `public` 디렉토리 내의 `GasStationEvent.html` 을 웹브라우저에 띄우도록 한다. 
+
+
+

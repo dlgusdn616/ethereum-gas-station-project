@@ -1,0 +1,341 @@
+<!--
+ Copyright 2016 Google Inc.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+	  http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="canonical" href="https://weather-pwa-sample.firebaseapp.com/final/">
+  <link rel="stylesheet" type="text/css" href="/css/Semantic-UI-Alert.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+  <title>gasStasion</title>
+  <link rel="stylesheet" type="text/css" href="css/semantic.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic.min.input.css">
+  <meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#2F3BA2">
+  <!-- TODO add manifest here -->
+
+
+
+</head>
+
+<body cz-shortcut-listen="true">
+	<div class="ui ui container">
+		<br>
+		<h1 class="ui center aligned header">Gas station</h1>
+    <br>
+
+    <div class="ui two column grid">
+      <div class="column">
+        <div class="ui raised segment">
+          <a class="ui red ribbon label">Oil</a>
+          <span>1L</span> 1,000WON
+          <p></p>
+          <a class="ui blue ribbon label">Diesel</a>
+          <span>1L</span> 800WON
+          <p></p>
+        </div>
+      </div>
+
+    </div>
+
+  <div class="ui three stackable doubling cards">
+    <div class="ui card">
+        <div class="content">
+          <div class="right floated meta"></div>
+          <img class="ui avatar image" src="/images/ETHgas.png"> 1st Machine
+        </div>
+        <div class="image">
+          <img src="/images/gas-eth.jpg">
+      </div>
+      <div class="content">
+        <div id="machineState1" class="ui blue progress">
+          <div class="bar"></div>
+        </div>
+        <div class="ui right labeled input">
+          <input id="maximum1" type="text">
+          <div class="ui dropdown label">
+            <div id="select1" class="text">Won</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item">Won</div>
+              <div class="item">Litter</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="extra content">
+        <div class="ui two buttons">
+            <div class="ui basic green button" id="machine1_start" onclick='machine({machine:1, type:"start"})'>START</div>
+            <div class="ui basic red button" onclick='machine({machine:1, type:"stop"})'>END</div>
+          </div>
+      </div>
+    </div>
+    <div class="ui card">
+        <div class="content">
+          <div class="right floated meta"></div>
+          <img class="ui avatar image" src="/images/ETHgas.png"> 2st Machine
+        </div>
+        <div class="image">
+          <img src="/images/gas-eth.jpg">
+      </div>
+      <div class="content">
+        <div id="machineState2" class="ui blue progress">
+          <div class="bar"></div>
+        </div>
+        <div class="ui right labeled input">
+          <input id="maximum2" type="text">
+          <div class="ui dropdown label">
+            <div id="select2" class="text">Won</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item">Won</div>
+              <div class="item">Litter</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="extra content">
+        <div class="ui two buttons">
+          <div class="ui basic green button" id="machine2_start" onclick='machine({machine:2, type:"start"})'>START</div>
+          <div class="ui basic red button" onclick='machine({machine:2, type:"stop"})'>END</div>
+          </div>
+      </div>
+    </div>
+    <div class="ui card">
+        <div class="content">
+          <div class="right floated meta"></div>
+          <img class="ui avatar image" src="/images/ETHgas.png"> 3st Machine
+        </div>
+        <div class="image">
+          <img src="/images/gas-eth.jpg">
+      </div>
+      <div class="content">
+        <div id="machineState3" class="ui blue progress">
+          <div class="bar"></div>
+        </div>
+        <div class="ui right labeled input">
+          <input id="maximum3" type="text" style="text-align:right">
+          <div class="ui dropdown label">
+            <div id="select3" class="text">Won</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item">Won</div>
+              <div class="item">Litter</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="extra content">
+        <div class="ui two buttons">
+          <div class="ui basic green button" id="machine3_start" onclick='machine({machine:3, type:"start"})'>START</div>
+          <div class="ui basic red button" onclick='machine({machine:3, type:"stop"})'>END</div>
+          </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/semantic.js"></script>
+  <script type="text/javascript" src="/js/Semantic-UI-Alert.js"></script>
+	<script type="text/javascript">
+
+    console.log('app start');
+
+    let _oilPrice = 1000,
+        _gasMachine = {
+          machine1: {
+            state: 0,
+            useLiter: 0,
+            totalPay: 0,
+            count: 0,
+            nowRefuelingAmout:0
+          },
+          machine2: {
+            state: 0,
+            useLiter: 0,
+            totalPay: 0,
+            count: 0,
+            nowRefuelingAmout:0
+          },
+          machine3: {
+            state: 0,
+            useLiter: 0,
+            totalPay: 0,
+            count: 0,
+            nowRefuelingAmout:0
+          }
+      };
+
+    $('.ui.dropdown').dropdown();
+
+    let machineCount = Object.keys(_gasMachine).length;
+
+    function machine(m){
+
+      let maximum = $("#maximum"+m.machine).val(),
+          thisMachine = _gasMachine["machine"+m.machine];
+
+      if(m.type === "stop"){
+        clearInterval(_timer[m.machine]);
+        $("#machine"+m.machine+"_start").html('START');
+        $("#maximum"+m.machine).val('0');
+        thisMachine.state = 0;
+        thisMachine.nowRefuelingAmout=0;
+        $('#machineState'+m.machine).progress({ percent: 0 });
+
+        let sum = 0;
+
+        for( var key in _gasMachine ) {
+          sum=sum+_gasMachine[key].useLiter;
+        }
+
+        console.log('total refueling : '+sum);
+
+        return 0;
+      }
+
+      console.log("#maximum"+m.machine);
+
+      if( maximum === "" ){
+
+        $.uiAlert({
+            textHead: 'Warning',
+            text: 'empty value',
+            bgcolor: '#DB2828',
+            textcolor: '#fff',
+            position: 'top-center', // top And bottom ||  left / center / right
+            icon: 'checkmark box',
+            time: 3
+        });
+
+        return 0;
+
+      }else{
+        $.uiAlert({
+            textHead: 'Success',
+            text: 'start refueling',
+            bgcolor: '#19c3aa',
+            textcolor: '#fff',
+            position: 'top-center', // top And bottom ||  left / center / right
+            icon: 'checkmark box',
+            time: 3
+        });
+      }
+
+      if( thisMachine.state === 1 ) {
+        console.log('refueling...');
+        return 0;
+      }
+
+        if(m.type === "start"){
+          thisMachine.state = 1;
+
+          $("#machine"+m.machine+"_start").html('<div class="ui active mini inline loader"></div>');
+
+          let select = $("#select"+m.machine).html(),
+              maximum = $("#maximum"+m.machine).val(),
+              liter = 0;
+
+          if(select ==="Won"){
+            liter = maximum / _oilPrice;
+          }else{
+            liter = maximum;
+          }
+
+          _gasMachine["machine"+m.machine].nowRefuelingAmout = liter;
+
+          refueling({liter: liter, machine: m.machine});
+        }
+    }
+
+    let _timer = {},
+        _timerCount ={};
+
+    function refueling(m){
+      _timerCount[m.machine] = 0;
+      _timer[m.machine] = setInterval(function(){
+
+        let thisMachine = _gasMachine["machine" + m.machine];
+        _timerCount[m.machine]++;
+        thisMachine.useLiter = thisMachine.useLiter + 1;
+
+        let percent = _timerCount[m.machine]/thisMachine.nowRefuelingAmout;
+
+        //thisMachine.nowRefuelingAmout = thisMachine.nowRefuelingAmout -1;
+        console.log(percent);
+        $('#machineState'+m.machine).progress({ percent: percent*100 });
+
+        if(_timerCount[m.machine]===thisMachine.nowRefuelingAmout){
+          console.log('test');
+          clearInterval(_timer[m.machine]);
+          $("#machine"+m.machine+"_start").html('START');
+          $("#maximum"+m.machine).val('0');
+          thisMachine.state = 0;
+          thisMachine.nowRefuelingAmout=0;
+          _timerCount[m.machine] = 0;
+          $('#machineState'+m.machine).progress({ percent: 0 });
+
+          let sum = 0,
+              state = 0;
+
+          for( var key in _gasMachine ) {
+            sum = sum +_gasMachine[key].useLiter;
+            state = state+_gasMachine[key].state;
+          }
+
+          if(state){
+            console.log('progress');
+          }else{
+
+            for( var key in _gasMachine ) {
+              _gasMachine[key].useLiter = 0;
+            }
+
+            console.log('total refueling : '+sum);
+
+              //node send
+              const url = "http://127.0.0.1:3000/usedgasamount/"+sum;
+
+        		fetch(url, {
+        			mode: 'no-cors',
+        			method: 'get'
+        		})
+        		.then(function(response) {
+        			response.text().then(function(text) {
+        				return 0;
+        			});
+        		})
+        		.catch(function(error) {
+        			console.log(error);
+        		});
+          }
+
+        }
+      }, 1000);
+    }
+
+
+
+  </script>
+</body>
+</html>
